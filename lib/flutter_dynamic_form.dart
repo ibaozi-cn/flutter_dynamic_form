@@ -1,10 +1,8 @@
 library flutter_dynamic_form;
 
-import 'package:flutter/cupertino.dart';
-
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
-
+export './src/form_builder.dart';
+export './src/components/field_title_text.dart';
+export './src/components/field_picker.dart';
+export './src/components/field_edit.dart';
+export './src/models/form_item.dart';
+export './src/form_builder.dart';

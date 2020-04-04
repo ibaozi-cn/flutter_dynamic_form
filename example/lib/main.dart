@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_dynamic_form/flutter_dynamic_form.dart';
+
+// ignore: implementation_imports
 
 void main() {
   runApp(MyApp());
@@ -47,6 +51,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  static GlobalKey<FormState> _nameKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _typeKey = GlobalKey<FormState>();
 
   void _incrementCounter() {
     setState(() {
@@ -56,8 +63,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      _formItem = _formItem..label = '$_counter';
     });
   }
+
+  FormItem _formItem =
+      FormItem(_nameKey, label: "label", widgetType: WidgetType.title);
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +110,40 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  FieldTitleText(
+                    _nameKey,
+                    label: _formItem.label,
+                  ),
+                  FieldEditor(
+                    key: _formItem.key,
+                    label: "Editor",
+                    labelAlign: TextAlign.center,
+                    initialValue: _formItem.label,
+                    onChanged: (value) {
+                      print("value=$value");
+                    },
+                  ),
+                  FieldPicker(
+                    key: _typeKey,
+                    label: 'Type',
+                    initialValue: 'U',
+                    hintText: 'Select One',
+                    options: <String>['Earth', 'Unicorn', 'Pegasi', 'Alicorn'],
+                    values: <String>['E', 'U', 'P', 'A'],
+                    validator: (String value) {
+                      if (value == null || value.isEmpty)
+                        return 'You must pick a type.';
+                      return null;
+                    },
+                    onSaved: (value) => _formItem.label = value,
+                  )
+                ],
+              ),
             ),
           ],
         ),

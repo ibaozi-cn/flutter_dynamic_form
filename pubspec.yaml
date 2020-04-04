@@ -1,7 +1,7 @@
 name: flutter_dynamic_form
 description: A new Flutter package project.
 version: 0.0.1
-author:
+author: ibaozi
 email: zzy0523@gmail.com
 homepage: https://github.com/ibaozi-cn/flutter_dynamic_form
 
@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+#  font_awesome_flutter: ^8.7.0
+  flutter_material_pickers: ^1.2.0
+
 
 dev_dependencies:
   flutter_test:
