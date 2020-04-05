@@ -67,6 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<FormItem> _formList = buildFormItemList();
   FormBuilderController _builderController = FormBuilderController();
 
+  GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -105,6 +107,24 @@ class _MyHomePageState extends State<MyHomePage> {
             // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Form(
+                key: _formKey,
+                child: FieldTest(
+                  onChanged: (value) {
+                    print("FieldTest onChanged value$value");
+                  },
+                ),
+              ),
+              RaisedButton(
+                onPressed: (){
+                  if(_formKey.currentState.validate()){
+                    print("FieldTest验证通过");
+                  }else{
+                    print("FieldTest验证失败");
+                  }
+                },
+                child: Text("校验FieldTest"),
+              ),
               FormBuilderWidget(
                 showSubmitButton: true,
                 itemList: _formList,
