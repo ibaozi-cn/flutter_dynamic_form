@@ -6,14 +6,14 @@ typedef Future OnSubmit(List<FormItem> itemList);
 class FormBuilderWidget extends StatefulWidget {
   final bool showSubmitButton;
   final List<FormItem> itemList;
-  final Map<String, dynamic> values;
+
   final OnSubmit onSubmit;
 
-  const FormBuilderWidget({Key key,
-    this.showSubmitButton,
-    this.itemList,
-    this.values,
-    this.onSubmit})
+  const FormBuilderWidget(
+      {Key key,
+      this.showSubmitButton = false,
+      this.itemList = const [],
+      this.onSubmit})
       : super(key: key);
 
   @override
@@ -21,17 +21,16 @@ class FormBuilderWidget extends StatefulWidget {
 }
 
 class _FormBuilderWidgetState extends State<FormBuilderWidget> {
-
   final _formKey = GlobalKey<FormState>();
-
-  List<FormItem> itemList = [];
 
   @override
   void initState() {
     super.initState();
   }
 
+  // ignore: missing_return
   Widget _buildBody(FormItem item) {
+    if (!item.visible) return Container();
     switch (item.widgetType) {
       case WidgetType.title:
         return FieldTitleText(
@@ -51,8 +50,14 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
       case WidgetType.edit:
         return FieldEditor(
           key: item.key,
-          label: "Editor",
+          label: item.label,
           initialValue: item.label,
+          hintText: item.extra['hintText'],
+          validator: (value) {
+            String result = item.validators.call(value);
+            print(result);
+            return result;
+          },
           onChanged: (value) {
             print("edit onChanged value=$value");
             item.mapValue = value;
@@ -81,43 +86,27 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Expanded(
+              Container(
                 child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.itemList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      FormItem item = itemList[index];
+                      FormItem item = widget.itemList[index];
                       return _buildBody(item);
                     }),
               ),
-              widget.showSubmitButton ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Container(
-                      width: 300,
-                      height: 40,
+              widget.showSubmitButton
+                  ? Container(
+                      width: 200,
                       child: RaisedButton(
-                        color: Theme.of(context).buttonColor,
-                        child: Text(
-                          "Submit",
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .primaryTextTheme
-                                  .title
-                                  .color),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            new BorderRadius.circular(30.0)),
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        child: Text('提交'),
                         onPressed: () async {
                           await onPressSubmitButton(context);
                         },
                       ),
-                    ),
-                  ),
-                ],
-              )
+                    )
                   : Container()
             ],
           ),
@@ -125,6 +114,7 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
       ),
     );
   }
+
   onPressSubmitButton(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -132,7 +122,7 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
       FocusScope.of(context).requestFocus(FocusNode());
       // call on submit function
       if (widget.onSubmit != null) {
-        await widget.onSubmit(itemList);
+        await widget.onSubmit(widget.itemList);
       }
       // clear the content
       _formKey.currentState.reset();
@@ -140,5 +130,4 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
       print("Form is not vaild");
     }
   }
-
 }

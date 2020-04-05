@@ -1,73 +1,175 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_dynamic_form/src/validators/fiield_results.dart';
 
-abstract class BaseFormValidators {
-  FieldResults validatorData(dynamic data);
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+abstract class FieldValidator<T> {
+  final String errorText;
+
+  FieldValidator(this.errorText) : assert(errorText != null);
+
+  bool isValid(T value);
+
+  String call(T value) {
+    return isValid(value) ? null : errorText;
+  }
 }
 
-class DefaultFormValidators extends BaseFormValidators {
+abstract class TextFieldValidator extends FieldValidator<String> {
+  TextFieldValidator(String errorText) : super(errorText);
+
+  bool get ignoreEmptyValues => true;
+
   @override
-  FieldResults validatorData(data) {
-    return FieldResults(isPass: true);
+  String call(String value) {
+    return (ignoreEmptyValues && value.isEmpty) ? null : super.call(value);
   }
+
+  bool hasMatch(String pattern, String input) =>
+      RegExp(pattern).hasMatch(input);
 }
 
-class EmailFormValidators extends BaseFormValidators {
+class RequiredValidator extends TextFieldValidator {
+  RequiredValidator({@required String errorText}) : super(errorText);
+
   @override
-  FieldResults validatorData(data) {
-    if (!(data is String)) {
-      return FieldResults(isPass: false, error: "data is error in type, please enter string type");
-    }
-    if (_isEmail(data)) {
-      return FieldResults(isPass: true);
-    } else {
-      return FieldResults(
-          isPass: false,
-          error: (BuildContext context) {
-            showErrors(context, content: 'data is not email');
-          });
-    }
-  }
-}
+  bool get ignoreEmptyValues => false;
 
-class PasswordMin6CharFormValidators extends BaseFormValidators {
   @override
-  FieldResults validatorData(data) {
-    if (!(data is String)) {
-      return FieldResults(isPass: false, error: "data is error in type, please enter string type");
-    }
-    if (_passwordMin6Chars(data)) {
-      return FieldResults(isPass: true);
-    } else {
-      return FieldResults(
-          isPass: false,
-          error: (BuildContext context) {
-            showErrors(context, content: 'Illegal password');
-          });
+  bool isValid(String value) {
+    return value.isNotEmpty;
+  }
+
+  @override
+  String call(String value) {
+    return isValid(value) ? null : errorText;
+  }
+}
+
+class MaxLengthValidator extends TextFieldValidator {
+  final int max;
+
+  MaxLengthValidator(this.max, {@required String errorText}) : super(errorText);
+
+  @override
+  bool isValid(String value) {
+    return value.length <= max;
+  }
+}
+
+class MinLengthValidator extends TextFieldValidator {
+  final int min;
+
+  MinLengthValidator(this.min, {@required String errorText}) : super(errorText);
+
+  @override
+  bool get ignoreEmptyValues => false;
+
+  @override
+  bool isValid(String value) {
+    return value.length >= min;
+  }
+}
+
+class LengthRangeValidator extends TextFieldValidator {
+  final int min;
+  final int max;
+
+  @override
+  bool get ignoreEmptyValues => false;
+
+  LengthRangeValidator({@required this.min, @required this.max, @required String errorText})
+      : super(errorText);
+
+  @override
+  bool isValid(String value) {
+    return value.length >= min && value.length <= max;
+  }
+}
+
+class RangeValidator extends TextFieldValidator {
+  final num min;
+  final num max;
+
+  RangeValidator({@required this.min, @required this.max, @required String errorText})
+      : super(errorText);
+
+  @override
+  bool isValid(String value) {
+    try {
+      final numericValue = num.parse(value);
+      return (numericValue >= min && numericValue <= max);
+    } catch (_) {
+      return false;
     }
   }
 }
 
+class EmailValidator extends TextFieldValidator {
+  final Pattern _emailPattern =
+      r"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$";
 
-bool _isEmail(value) {
-  final emailRegExp =
-      RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
-  if (value == null) {
-    return false;
-  }
+  EmailValidator({@required String errorText}) : super(errorText);
 
-  if (value.isEmpty) {
-    return false;
-  }
-  return emailRegExp.hasMatch(value);
+  @override
+  bool isValid(String value) => hasMatch(_emailPattern, value);
 }
 
-bool _passwordMin6Chars(String value) {
-  if (value == null) {
-    return false;
+class PatternValidator extends TextFieldValidator {
+  final Pattern pattern;
+
+  PatternValidator(this.pattern, {@required String errorText})
+      : super(errorText);
+
+  @override
+  bool isValid(String value) => hasMatch(pattern, value);
+}
+
+class DateValidator extends TextFieldValidator {
+  final String format;
+
+  DateValidator(this.format, {@required String errorText}) : super(errorText);
+
+  @override
+  bool isValid(String value) {
+    try {
+      final dateTime = DateFormat(format).parseStrict(value);
+      return dateTime != null;
+    } catch (_) {
+      return false;
+    }
   }
-  if (value.isEmpty) {
-    return false;
+}
+
+class MultiValidator extends FieldValidator {
+  final List<FieldValidator> validators;
+  static String _errorText = '';
+
+  MultiValidator(this.validators) : super(_errorText);
+
+  @override
+  bool isValid(value) {
+    for (FieldValidator validator in validators) {
+      if (!validator.isValid(value)) {
+        _errorText = validator.errorText;
+        return false;
+      }
+    }
+    return true;
   }
-  return value.length >= 6;
+
+  @override
+  String call(dynamic value) {
+    return isValid(value) ? null : _errorText;
+  }
+}
+
+class MatchValidator {
+
+  final String errorText;
+
+  MatchValidator({@required this.errorText});
+
+  String validateMatch(String value, String value2) {
+    return value == value2 ? null : errorText;
+  }
 }

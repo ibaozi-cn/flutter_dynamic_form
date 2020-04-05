@@ -21,7 +21,7 @@ class CardContainer extends StatelessWidget {
       this.content,
       this.pickerIcon,
       this.labelWidth,
-      this.errorText,
+      this.errorText = '',
       this.visible,
       this.labelAlign,
       this.iconLeft,
@@ -47,7 +47,7 @@ class CardContainer extends StatelessWidget {
               children: <Widget>[
                 _buildLabelBlock(context),
                 Expanded(
-                  child: content,
+                  child: _buildDecoratedContent(context),
                 ),
                 _buildRightDecoration()
               ],
@@ -58,6 +58,26 @@ class CardContainer extends StatelessWidget {
     } else {
       return Container();
     }
+  }
+
+  Widget _buildDecoratedContent(BuildContext context) {
+    var decoratedContent = content;
+    if (content is TextField || content is TextFormField) {
+      // do nothing, these already have built in InputDecorations
+    } else {
+      // wrap in a decorator to show validation errors
+      final InputDecoration decoration = const InputDecoration()
+          .applyDefaults(Theme.of(context).inputDecorationTheme)
+          .copyWith(
+          errorText: errorText,
+          contentPadding: EdgeInsets.all(0.0),
+          isDense: true,
+          border: InputBorder.none);
+
+      decoratedContent = InputDecorator(decoration: decoration, child: content);
+    }
+
+    return decoratedContent;
   }
 
   Widget _buildRightDecoration() {
