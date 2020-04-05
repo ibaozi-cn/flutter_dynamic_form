@@ -7,15 +7,15 @@
 整个架构图分两个部分
 - 第一部分展示的是这次框架的主角FormBuilder在Page页面中的位置，以及基本的属性定义
 
-**formController** 是对表单统一管理的抽象，可以对表单做验证validator，重置所有表单状态reset，保存save等，未来根据需求再拓展
+  **formController** 是对表单统一管理的抽象，可以对表单做验证validator，重置所有表单状态reset，保存save等，未来根据需求再拓展
 
-**showSubmitButton** 显示提交按钮，有自己的提交按钮可以设置false隐藏
+  **showSubmitButton** 显示提交按钮，有自己的提交按钮可以设置false隐藏
 
-**onSubmit** 数据校验后的callBack回调，返回数据验证结果
+  **onSubmit** 数据校验后的callBack回调，返回数据验证结果
 
-**mapperFactory** 这个是FormField动态扩展的关键，通过它就是让其他人动态实现一个自己的FormField，用来满足特殊的业务需求。
+  **mapperFactory** 这个是FormField动态扩展的关键，通过它就是让其他人动态实现一个自己的FormField，用来满足特殊的业务需求。
 
-**itemList** 这个是mapperFactory将业务数据集合FormItem转换成对应的Widget集合，最终显示的当前页面。
+  **itemList** 这个是mapperFactory将业务数据集合FormItem转换成对应的Widget集合，最终显示的当前页面。
 
 - 第二部分展示了一个动态表单的业务流程，从服务器下发数据，到映射成对应的FormItemList，再由MapperFactory转换成对应的Widget，最终交给FormBuilder，再由FormBuilder生成一个Form，通过一个ListView动态的展示所有的FormField，并通过FieldValidator的抽象实现来做最终的数据校验，这是大致的流程。
 希望两种表达，能让你对整个框架有一个清晰的认识，接下来我们就聊一下，如何拓展一个FormField，这样你就能从源头了解到该框架。
