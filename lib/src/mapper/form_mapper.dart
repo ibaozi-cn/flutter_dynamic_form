@@ -43,7 +43,7 @@ class DefaultMapperFactory extends MapperFactory {
         return FieldEditor(
           key: item.key,
           label: item.label,
-          initialValue: item.label,
+          initialValue: "",
           hintText: item.extra['hintText'],
           required: item.required,
           validator: (value) {

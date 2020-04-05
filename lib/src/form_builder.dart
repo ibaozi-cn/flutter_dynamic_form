@@ -6,6 +6,7 @@ import 'mapper/form_mapper.dart';
 typedef Future OnSubmit(List<FormItem> itemList);
 
 class FormBuilderWidget extends StatefulWidget {
+
   final bool showSubmitButton;
   final List<FormItem> itemList;
   final OnSubmit onSubmit;
@@ -79,9 +80,13 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
         await widget.onSubmit(widget.itemList);
       }
       // clear the content
-      _formKey.currentState.reset();
+//      _formKey.currentState.reset();
     } else {
       print("Form is not vaild");
     }
   }
+
+
+
+
 }

@@ -23,6 +23,8 @@ class FieldEditor extends FormField<String> {
   final bool required;
   final TextAlign contentTextAlign;
   final TextStyle contentTextStyle;
+  final TextEditingController controller;
+
 
   FieldEditor({
     Key key,
@@ -48,6 +50,7 @@ class FieldEditor extends FormField<String> {
     this.contentTextAlign = TextAlign.start,
     this.contentTextStyle =
         const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+    this.controller
   }) : super(
             key: key,
             initialValue: initialValue,
@@ -65,8 +68,63 @@ class FieldEditor extends FormField<String> {
 }
 
 class _FieldEditorState extends FormFieldState<String> {
+
+  TextEditingController _controller;
+
+  TextEditingController get _effectiveController =>
+      widget.controller ?? _controller;
+
   @override
   FieldEditor get widget => super.widget as FieldEditor;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.controller == null) {
+      _controller = TextEditingController(text: widget.initialValue);
+    }else{
+      widget.controller.addListener(_handleControllerChanged);
+    }
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    setState(() {
+      _effectiveController.text = widget.initialValue;
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.removeListener(_handleControllerChanged);
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(FieldEditor oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller?.removeListener(_handleControllerChanged);
+      widget.controller?.addListener(_handleControllerChanged);
+
+      if (oldWidget.controller != null && widget.controller == null)
+        _controller =
+            TextEditingController.fromValue(oldWidget.controller.value);
+      if (widget.controller != null) {
+        setValue(widget.controller.text);
+        if (oldWidget.controller == null) _controller = null;
+      }
+    }
+  }
+
+
+
+  void _handleControllerChanged() {
+    if (_effectiveController.text != value) {
+      didChange(_effectiveController.text);
+    }
+  }
 
   void _handleOnChanged(String _value) {
     if (this.value != _value) {
@@ -89,6 +147,7 @@ class _FieldEditorState extends FormFieldState<String> {
         errorText: errorText,
         required: widget?.required,
         content: TextField(
+          controller: _effectiveController,
           onChanged: _handleOnChanged,
           decoration: widget.decoration ??
               InputDecoration(
