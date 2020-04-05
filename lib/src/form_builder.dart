@@ -3,22 +3,23 @@ import 'package:flutter_dynamic_form/flutter_dynamic_form.dart';
 
 import 'mapper/form_mapper.dart';
 
-typedef Future OnSubmit(List<FormItem> itemList);
+typedef OnSubmit(bool isValidator, List<FormItem> itemList);
 
 class FormBuilderWidget extends StatefulWidget {
-
   final bool showSubmitButton;
   final List<FormItem> itemList;
-  final OnSubmit onSubmit;
   final MapperFactory mapperFactory;
+  final FormBuilderController formBuilderController;
+  final OnSubmit onSubmit;
 
-  FormBuilderWidget({
-    Key key,
-    this.showSubmitButton = false,
-    this.itemList = const [],
-    this.onSubmit,
-    @required this.mapperFactory,
-  }) : super(key: key);
+  FormBuilderWidget(
+      {Key key,
+      this.showSubmitButton = false,
+      this.itemList = const [],
+      this.onSubmit,
+      @required this.mapperFactory,
+      this.formBuilderController})
+      : super(key: key);
 
   @override
   _FormBuilderWidgetState createState() => _FormBuilderWidgetState();
@@ -30,6 +31,11 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
   @override
   void initState() {
     super.initState();
+    if (widget.formBuilderController != null) {
+      widget.formBuilderController.validate = validate;
+      widget.formBuilderController.reset = reset;
+      widget.formBuilderController.save = save;
+    }
   }
 
   @override
@@ -71,22 +77,39 @@ class _FormBuilderWidgetState extends State<FormBuilderWidget> {
   }
 
   onPressSubmitButton(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (validate()) {
+      save();
       // hide keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       // call on submit function
       if (widget.onSubmit != null) {
-        await widget.onSubmit(widget.itemList);
+        widget.onSubmit(true, widget.itemList);
       }
-      // clear the content
-//      _formKey.currentState.reset();
     } else {
-      print("Form is not vaild");
+      await widget.onSubmit(false, null);
     }
   }
 
+  // clear the content
+  reset() {
+    _formKey.currentState.reset();
+  }
 
+  save() {
+    _formKey.currentState.save();
+  }
 
+  bool validate() {
+    return _formKey.currentState.validate();
+  }
+}
 
+typedef void Reset();
+typedef void Save();
+typedef bool Validate();
+
+class FormBuilderController {
+  Reset reset;
+  Save save;
+  Validate validate;
 }

@@ -51,11 +51,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  static GlobalKey<FormState> _nameKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _typeKey = GlobalKey<FormState>();
-
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -63,17 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
 //      _formList.add(_formItem);
 //      _formList.insert(0, _formItem);
-      _formList.elementAt(0).visible = !_formList.elementAt(0).visible;
+      _builderController.reset();
     });
   }
 
-  FormItem _formItem =
-      FormItem(_nameKey, label: "label", widgetType: WIDGET_TYPE_HEAD);
-
   List<FormItem> _formList = buildFormItemList();
+  FormBuilderController _builderController = FormBuilderController();
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +106,11 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FormBuilderWidget(
-                key: _formKey,
                 showSubmitButton: true,
                 itemList: _formList,
-                onSubmit: (data) async {
-                  print(data.toString());
+                formBuilderController: _builderController,
+                onSubmit: (bool, data) async {
+                  if (bool) print(data.toString());
                 },
                 mapperFactory: DefaultMapperFactory(null),
               ),
@@ -129,7 +121,12 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("重置"),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
