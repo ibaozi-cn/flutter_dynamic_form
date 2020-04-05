@@ -81,6 +81,10 @@ Step 2
 
 ![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/validator_min.jpg)
 
+## Blog 
+
+https://www.jianshu.com/p/42759cd7eba5
+
 ## Thanks
 [sirily11](https://github.com/sirily11)/**[json-textfrom](https://github.com/sirily11/json-textfrom)**
 
