@@ -68,15 +68,22 @@ Step 2
               )
 ```
 ## Ui and validator result
+
 ![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/login.jpg)
+
 ![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/validator_empty.jpg)
+
 ![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/validator_min.jpg)
 
 ## Thanks
 [sirily11](https://github.com/sirily11)/**[json-textfrom](https://github.com/sirily11/json-textfrom)**
+
 [codegrue](https://github.com/codegrue)/**[card_settings](https://github.com/codegrue/card_settings)**
+
 [https://medium.com/flutter-community/flutter-how-to-validate-fields-dynamically-created-40cafca5c3cb](https://medium.com/flutter-community/flutter-how-to-validate-fields-dynamically-created-40cafca5c3cb)
+
 [https://stackoverflow.com/questions/55463981/whats-the-best-way-to-dynamically-load-form-fields-in-flutter](https://stackoverflow.com/questions/55463981/whats-the-best-way-to-dynamically-load-form-fields-in-flutter)
+
 [https://book.flutterchina.club/chapter7/inherited_widget.html](https://book.flutterchina.club/chapter7/inherited_widget.html)
 
 
