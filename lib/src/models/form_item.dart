@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import '../../flutter_dynamic_form.dart';
 
 class FormItem {
-  final Key key;
+
+  Key key;
   String label;
-  final WidgetType widgetType;
-  final bool required;
+  String widgetType;
+  bool required;
   bool visible;
-  final String mapKey;
+  String mapKey;
   dynamic mapValue;
-  final Map<String, dynamic> extra;
-  final FieldValidator validators;
+  Map<String, dynamic> extra;
+  FieldValidator validators;
 
   FormItem(this.key,
       {this.label,
@@ -20,15 +21,16 @@ class FormItem {
       this.mapKey,
       this.extra,
       this.validators,
-      this.visible  = true,
-      this.mapValue});
+      this.visible = true,
+      this.mapValue,});
 
   @override
   String toString() {
     return 'FormItem{key: $key, label: $label, widgetType: $widgetType, required: $required, visible: $visible, mapKey: $mapKey, mapValue: $mapValue, extra: $extra, validators: $validators}';
   }
-
-
 }
 
-enum WidgetType { title, picker, edit, custom }
+const WIDGET_TYPE_HEAD = "widget_type_head_form";
+const WIDGET_TYPE_PICKER = "widget_type_picker_form";
+const WIDGET_TYPE_EDIT = "widget_type_edit_from";
+

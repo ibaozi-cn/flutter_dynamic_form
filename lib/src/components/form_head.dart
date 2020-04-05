@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 
-class FieldTitleText extends FormField {
+class FormHead extends FormField {
 
-  final double width;
-  final TextAlign labelAlign;
-  final String label;
-  final double labelSize;
+  final TextAlign titleAlign;
+  final String title;
+  final TextStyle titleStyle;
   final Icon icon;
   final Color bgColor;
-  final Color labelColor;
   final EdgeInsetsGeometry padding;
 
-  FieldTitleText(
-      Key key,
-      {this.width = double.infinity,
-      this.labelAlign,
-      this.label,
-      this.labelSize = 18,
+  FormHead(Key key,
+      {this.titleAlign,
+      this.title,
+      this.titleStyle =const TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+      ),
       this.icon,
       this.bgColor = Colors.blue,
-      this.labelColor = Colors.white,
-      this.padding = const EdgeInsets.all(16)})
+      this.padding = const EdgeInsets.only(left: 8,top: 16,bottom: 16)})
       : super(
-            key:key,
+            key: key,
             builder: (state) {
               return Ink(
                 color: bgColor,
-                width: width,
                 child: InkWell(
                   onTap: () {},
                   child: Container(
@@ -35,10 +32,9 @@ class FieldTitleText extends FormField {
                       children: <Widget>[
                         icon ?? SizedBox(),
                         Text(
-                          label,
-                          textAlign: labelAlign,
-                          style:
-                              TextStyle(fontSize: labelSize, color: labelColor),
+                          title,
+                          textAlign: titleAlign,
+                          style: titleStyle,
                         )
                       ],
                     ),
@@ -46,5 +42,5 @@ class FieldTitleText extends FormField {
                 ),
               );
             },
-            initialValue: label);
+            initialValue: title);
 }

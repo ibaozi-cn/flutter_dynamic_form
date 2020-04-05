@@ -5,13 +5,13 @@ List<FormItem> buildFormItemList() {
   List<FormItem> item = [];
   item.add(FormItem(
     GlobalKey<FormState>(),
-    widgetType: WidgetType.title,
+    widgetType: WIDGET_TYPE_HEAD,
     label: "登录",
   ));
   item.add(FormItem(GlobalKey<FormState>(),
-      widgetType: WidgetType.edit,
+      widgetType: WIDGET_TYPE_EDIT,
       label: "用户名",
-      required: true,
+      required: false,
       validators: EmailValidator(errorText: "请输入正确的邮箱"),
       mapKey: "userName",
       extra: {'hintText': '请输入用户名'}));
@@ -23,7 +23,7 @@ List<FormItem> buildFormItemList() {
   ]);
 
   item.add(FormItem(GlobalKey<FormState>(),
-      widgetType: WidgetType.edit,
+      widgetType: WIDGET_TYPE_EDIT,
       label: "密码",
       required: true,
       validators: passwordValidator,

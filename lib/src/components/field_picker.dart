@@ -25,12 +25,13 @@ class FieldPicker extends FormField<String> {
 
   final bool visible;
 
+  final bool autoValidate;
+
   FieldPicker({
     Key key,
     String initialValue,
     FormFieldSetter<String> onSaved,
     FormFieldValidator<String> validator,
-    bool autovalidate: false,
     this.label = 'Label',
     this.visible = true,
     this.onChanged,
@@ -41,6 +42,7 @@ class FieldPicker extends FormField<String> {
     this.hintText,
     this.options,
     this.values,
+    this.autoValidate
   })  : assert(values == null || options.length == values.length,
             "If you provide 'values', they need the same number as 'options'"),
         super(
@@ -48,7 +50,7 @@ class FieldPicker extends FormField<String> {
             initialValue: initialValue,
             onSaved: onSaved,
             validator: validator,
-            autovalidate: autovalidate,
+            autovalidate: autoValidate,
             builder: (field) {
               return (field as _FieldPickerState)._build(field.context);
             });
@@ -116,9 +118,8 @@ class _FieldPickerState extends FormFieldState<String> {
       },
       child: CardContainer(
         label: widget?.label,
-        labelAlign: widget?.labelAlign,
         visible: widget?.visible,
-        iconLeft: widget?.icon,
+        leftIcon: widget?.icon,
         requiredIndicator: widget?.requiredIndicator,
         errorText: errorText,
         content: Text(
@@ -126,7 +127,7 @@ class _FieldPickerState extends FormFieldState<String> {
           textAlign:
               widget?.contentAlign,
         ),
-        pickerIcon: Icons.arrow_drop_down,
+        rightIcon: Icon(Icons.arrow_drop_down),
       ),
     );
   }

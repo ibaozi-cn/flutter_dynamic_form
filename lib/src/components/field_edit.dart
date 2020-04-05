@@ -7,23 +7,22 @@ class FieldEditor extends FormField<String> {
 
   final ValueChanged<String> onChanged;
   final String label;
-  final TextAlign labelAlign;
-  final TextAlign contentAlign;
   final String hintText;
   final Icon icon;
   final Widget requiredIndicator;
   final bool visible;
   final InputDecoration decoration;
   final TextInputType keyboardType;
-  final TextStyle style;
-  final TextAlign textAlign;
-  final bool autofocus;
+  final bool autoFocus;
   final bool readOnly;
   final int maxLines;
   final int minLines;
   final int maxLength;
   final String prefixText;
-  final List<TextInputFormatter> inputFormatters;
+  final List<TextInputFormatter> inputFormatterList;
+  final bool required;
+  final TextAlign contentTextAlign;
+  final TextStyle contentTextStyle;
 
   FieldEditor({
     Key key,
@@ -33,22 +32,22 @@ class FieldEditor extends FormField<String> {
     this.label = 'Label',
     this.visible = true,
     this.onChanged,
-    this.labelAlign,
     this.icon,
-    this.contentAlign,
     this.requiredIndicator,
     this.hintText,
     this.prefixText,
     this.decoration,
     this.keyboardType,
-    this.style,
-    this.textAlign = TextAlign.start,
-    this.autofocus = false,
+    this.autoFocus = false,
     this.readOnly = false,
     this.maxLines = 1,
     this.minLines,
     this.maxLength,
-    this.inputFormatters,
+    this.inputFormatterList,
+    this.required,
+    this.contentTextAlign = TextAlign.start,
+    this.contentTextStyle =
+        const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
   }) : super(
             key: key,
             initialValue: initialValue,
@@ -81,39 +80,38 @@ class _FieldEditorState extends FormFieldState<String> {
   Widget _build(BuildContext context) {
     // make local mutable copies of values and options
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: () {},
       child: CardContainer(
         label: widget?.label,
-        labelAlign: widget?.labelAlign ?? TextAlign.start,
         visible: widget?.visible,
-        iconLeft: widget?.icon,
+        leftIcon: widget?.icon,
         requiredIndicator: widget?.requiredIndicator,
         errorText: errorText,
+        required: widget?.required,
         content: TextField(
-            onChanged: _handleOnChanged,
-            decoration: widget.decoration ?? InputDecoration(
-              contentPadding: EdgeInsets.all(8.0),
-              border: InputBorder.none,
-              errorText: errorText,
-              prefixText: widget?.prefixText,
-              hintText: widget?.hintText,
-              isDense: true,
-            ),
-            readOnly: widget.readOnly,
-            maxLines: widget.maxLines,
-            minLines: widget.minLines,
-            autofocus: widget.autofocus,
-            style: widget.style,
-            textAlign: widget?.contentAlign ?? TextAlign.start,
-            keyboardType: widget.keyboardType,
-            maxLength: widget.maxLength,
-            inputFormatters: widget?.inputFormatters ??
-                [
-                  // if we don't want the counter, use this maxLength instead
-                  LengthLimitingTextInputFormatter(widget?.maxLength)
-                ],
+          onChanged: _handleOnChanged,
+          decoration: widget.decoration ??
+              InputDecoration(
+                contentPadding: EdgeInsets.all(8.0),
+                border: InputBorder.none,
+                errorText: errorText,
+                prefixText: widget?.prefixText,
+                hintText: widget?.hintText,
+                isDense: true,
+              ),
+          readOnly: widget.readOnly,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          autofocus: widget.autoFocus,
+          style: widget.contentTextStyle,
+          textAlign: widget.contentTextAlign ?? TextAlign.start,
+          keyboardType: widget.keyboardType,
+          maxLength: widget.maxLength,
+          inputFormatters: widget?.inputFormatterList ??
+              [
+                // if we don't want the counter, use this maxLength instead
+                LengthLimitingTextInputFormatter(widget?.maxLength)
+              ],
         ),
 //        pickerIcon: Icons.arrow_drop_down,
       ),

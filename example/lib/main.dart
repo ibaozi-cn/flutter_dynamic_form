@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   FormItem _formItem =
-      FormItem(_nameKey, label: "label", widgetType: WidgetType.title);
+      FormItem(_nameKey, label: "label", widgetType: WIDGET_TYPE_HEAD);
 
   List<FormItem> _formList = buildFormItemList();
 
@@ -83,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -113,12 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FormBuilderWidget(
-                  key: _formKey,
-                  showSubmitButton: true,
-                  itemList: _formList,
-                  onSubmit: (data) async {
-                    print(data.toString());
-                  }),
+                key: _formKey,
+                showSubmitButton: true,
+                itemList: _formList,
+                onSubmit: (data) async {
+                  print(data.toString());
+                },
+                mapperFactory: DefaultMapperFactory(null),
+              ),
             ],
           ),
         ),

@@ -1,31 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CardContainer extends StatelessWidget {
 
+  final Icon leftIcon;
   final String label;
-  final String unitLabel;
-  final Widget content;
-  final IconData pickerIcon;
   final double labelWidth;
+  final Widget content;
+  final Icon rightIcon;
   final String errorText;
   final bool visible;
-  final TextAlign labelAlign;
-  final Icon iconLeft;
   final Widget requiredIndicator;
+  final bool required;
 
-  const CardContainer(
+  MainAxisAlignment labelAlign = MainAxisAlignment.start;
+  TextStyle labelStyle =
+  TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  double labelIconSize = 24;
+
+  bool autoValidate = false;
+
+   CardContainer(
       {Key key,
       this.label,
-      this.unitLabel,
       this.content,
-      this.pickerIcon,
+      this.rightIcon,
       this.labelWidth,
-      this.errorText = '',
+      this.errorText,
       this.visible,
-      this.labelAlign,
-      this.iconLeft,
-      this.requiredIndicator})
+      this.leftIcon,
+      this.requiredIndicator,
+      this.required = false,
+      })
       : super(key: key);
 
   @override
@@ -40,7 +47,6 @@ class CardContainer extends StatelessWidget {
         ),
         padding: EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,10 +75,10 @@ class CardContainer extends StatelessWidget {
       final InputDecoration decoration = const InputDecoration()
           .applyDefaults(Theme.of(context).inputDecorationTheme)
           .copyWith(
-          errorText: errorText,
-          contentPadding: EdgeInsets.all(0.0),
-          isDense: true,
-          border: InputBorder.none);
+              errorText: errorText,
+              contentPadding: EdgeInsets.all(0.0),
+              isDense: true,
+              border: InputBorder.none);
 
       decoratedContent = InputDecorator(decoration: decoration, child: content);
     }
@@ -81,61 +87,34 @@ class CardContainer extends StatelessWidget {
   }
 
   Widget _buildRightDecoration() {
-    return (pickerIcon != null || unitLabel != null)
-        ? Container(
-      alignment: Alignment.centerRight,
-      child: (pickerIcon != null)
-          ? Icon(pickerIcon)
-          : Text(
-        unitLabel,
-        style: TextStyle(fontStyle: FontStyle.italic),
-      ),
-    )
+    return (rightIcon != null)
+        ? Container(alignment: Alignment.centerRight, child: rightIcon)
         : Container();
   }
 
   _buildLabelBlock(BuildContext context) {
     return Container(
       width: labelWidth ?? 100.0,
-//      color: Colors.cyan,
+      height: 40,
       child: Row(
         children: <Widget>[
           _buildLeftIcon(context),
           _buildLabelSpacer(context),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                _buildLabelText(context),
-                _buildRequiredIndicator(context),
-              ],
+            child: Container(
+              child: Row(
+                mainAxisAlignment: labelAlign,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _buildLabelText(context),
+                  _buildRequiredIndicator(context),
+                ],
+              ),
             ),
           ),
-          _buildLabelSuffix(context),
         ],
       ),
     );
-  }
-
-  Widget _buildLabelSuffix(BuildContext context) {
-    return Text(
-      unitLabel ?? "",
-      style: _buildLabelStyle(context),
-    );
-  }
-
-  Widget _buildRequiredIndicator(BuildContext context) {
-    if (requiredIndicator == null) return Container();
-    if (requiredIndicator is Text) {
-      var indicatorStyle = (requiredIndicator as Text).style;
-      var style = _buildLabelStyle(context).merge(indicatorStyle);
-
-      return Text(
-        (requiredIndicator as Text).data,
-        style: style,
-      );
-    }
-    return requiredIndicator;
   }
 
   Widget _buildLabelText(BuildContext context) {
@@ -144,29 +123,19 @@ class CardContainer extends StatelessWidget {
       child: Text(
         label,
         softWrap: true,
-        style: _buildLabelStyle(context),
+        style: labelStyle,
       ),
     );
   }
 
-  TextStyle _buildLabelStyle(BuildContext context) {
-    TextStyle labelStyle = TextStyle(
-      fontWeight: FontWeight.w600,
-      fontSize: 14.0,
-    );
-
-    return labelStyle.merge(Theme.of(context).inputDecorationTheme.labelStyle);
-  }
-
   Widget _buildLeftIcon(BuildContext context) {
     TextStyle labelStyle = Theme.of(context).inputDecorationTheme.labelStyle;
-    return (iconLeft == null)
+    return (leftIcon == null)
         ? Container()
         : Container(
-            margin: EdgeInsets.all(0.0),
-            padding: EdgeInsets.only(right: 4.0),
             child: Icon(
-              iconLeft.icon,
+              leftIcon.icon,
+              size: labelIconSize,
               color: (labelStyle == null) ? null : labelStyle.color,
             ),
           );
@@ -176,5 +145,18 @@ class CardContainer extends StatelessWidget {
     return ((labelAlign ?? TextAlign.left) == TextAlign.right)
         ? Expanded(child: Container())
         : Container();
+  }
+
+  _buildRequiredIndicator(BuildContext context) {
+    if (required == null || !required) return Container();
+    return Container(
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+          "*",
+          style: TextStyle(color: Colors.red),
+        ),
+      ),
+    );
   }
 }
