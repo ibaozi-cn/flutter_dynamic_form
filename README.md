@@ -3,9 +3,8 @@
 
 # Architecture
 ![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/arc.webp)
-用了几年前设计的Table架构图，是kotlin版本的动态表单框架，也同样适用于现在的设计，这次从设计到实现，其实经历了很多，前期看官方文档FormField的用法，还有一些现有的动态表单框架，一开始选择用一般的StatefulWidget实现，但做了几个发现一个问题，各个Widget的状态管理，数据的变化，或者说统一的验证提交等操作，需要太多的实现，未来简化实现，最终还是选择用FormField，拓展它的子类来更好的管理表单。请仔细看图，我来解释下。
-整个架构图分两个部分
-- 第一部分展示的是这次框架的主角FormBuilder在Page页面中的位置，以及基本的属性定义
+
+- ⚡️第一部分展示的是这次框架的主角FormBuilder在Page页面中的位置，以及基本的属性定义
 
   **formController** 是对表单统一管理的抽象，可以对表单做验证validator，重置所有表单状态reset，保存save等，未来根据需求再拓展
 
@@ -17,7 +16,7 @@
 
   **itemList** 这个是mapperFactory将业务数据集合FormItem转换成对应的Widget集合，最终显示的当前页面。
 
-- 第二部分展示了一个动态表单的业务流程，从服务器下发数据，到映射成对应的FormItemList，再由MapperFactory转换成对应的Widget，最终交给FormBuilder，再由FormBuilder生成一个Form，通过一个ListView动态的展示所有的FormField，并通过FieldValidator的抽象实现来做最终的数据校验，这是大致的流程。
+- ⚡️第二部分展示了一个动态表单的业务流程，从服务器下发数据，到映射成对应的FormItemList，再由MapperFactory转换成对应的Widget，最终交给FormBuilder，再由FormBuilder生成一个Form，通过一个ListView动态的展示所有的FormField，并通过FieldValidator的抽象实现来做最终的数据校验，这是大致的流程。
 希望两种表达，能让你对整个框架有一个清晰的认识，接下来我们就聊一下，如何拓展一个FormField，这样你就能从源头了解到该框架。
 ## Getting Started
 Step 1
