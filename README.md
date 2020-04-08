@@ -4,7 +4,7 @@
 It has been written **100% in Dart**. ❤️
 
 # Architecture
-![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/arc.webp)
+![](./img/arc.webp)
 
 - ⚡️第一部分展示的是这次框架的主角FormBuilder在Page页面中的位置，以及基本的属性定义
 
@@ -76,11 +76,11 @@ Step 2
 ```
 ## Ui and validator result
 
-![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/login.jpg)
+![](./img/login.jpg)
 
-![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/validator_empty.jpg)
+![](./img/validator_empty.jpg)
 
-![image](https://github.com/ibaozi-cn/flutter_dynamic_form/raw/master/img/validator_min.jpg)
+![](./img/validator_min.jpg)
 
 ## Blog 
 
