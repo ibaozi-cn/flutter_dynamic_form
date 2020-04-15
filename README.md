@@ -1,25 +1,25 @@
 # flutter_dynamic_form
-⚡️动态表单在实际的业务开发中，有相当多的业务场景，特别是针对ToB的业务，表单的提交，校验就更别说了，越来越多，越来越复杂，如果说能有一个合适框架来减少那些本来就很简单但充斥着大量重复的操作，同样也可以解决那些复杂的操作，何乐而不为呢。
+⚡️In the actual business development, there are quite a lot of business scenarios for dynamic forms, especially for ToB business, form submission and verification, not to mention, more and more complex. If there is an appropriate framework to reduce those simple but full of repeated operations, it can also solve those complex operations, why not.作，何乐而不为呢。
 
 It has been written **100% in Dart**. ❤️
 
 # Architecture
 ![](./img/arc.webp)
 
-- ⚡️第一部分展示的是这次框架的主角FormBuilder在Page页面中的位置，以及基本的属性定义
+- ⚡️The first part shows the position of FormBuilder, the main character of the framework, in the page, and the basic property definition
 
-  **formController** 是对表单统一管理的抽象，可以对表单做验证validator，重置所有表单状态reset，保存save等，未来根据需求再拓展
+  **formController** It is an abstraction of unified form management. It can verify the validator, reset all form statuses, save and so on. In the future, it can be expanded according to the needs
 
-  **showSubmitButton** 显示提交按钮，有自己的提交按钮可以设置false隐藏
+  **showSubmitButton** Show the submit button. You can set false to hide it if you have your own submit button
 
-  **onSubmit** 数据校验后的callBack回调，返回数据验证结果
+  **onSubmit** The callback callback after data verification returns the data verification result
 
-  **mapperFactory** 这个是FormField动态扩展的关键，通过它就是让其他人动态实现一个自己的FormField，用来满足特殊的业务需求。
+  **mapperFactory** This is the key to the dynamic expansion of formfield, through which other people can dynamically implement their own formfield to meet special business needs.
 
-  **itemList** 这个是mapperFactory将业务数据集合FormItem转换成对应的Widget集合，最终显示的当前页面。
+  **itemList** This is the current page that maperFactory converts the business data set formitem to the corresponding widget set, and finally displays.
 
-- ⚡️第二部分展示了一个动态表单的业务流程，从服务器下发数据，到映射成对应的FormItemList，再由MapperFactory转换成对应的Widget，最终交给FormBuilder，再由FormBuilder生成一个Form，通过一个ListView动态的展示所有的FormField，并通过FieldValidator的抽象实现来做最终的数据校验，这是大致的流程。
-希望两种表达，能让你对整个框架有一个清晰的认识，接下来我们就聊一下，如何拓展一个FormField，这样你就能从源头了解到该框架。
+- ⚡️The second part shows the business process of a dynamic form, from sending data from the server to mapping to the corresponding formitemlist, then converting from mapperfactory to the corresponding widget, and finally handing it to FormBuilder, then FormBuilder generates a form, dynamically displaying all the formfields through a listview, and finally doing the final data verification through the abstract implementation of fieldvalidator , this is the general process.
+I hope that the two expressions can give you a clear understanding of the whole framework. Next, let's talk about how to expand a formfield so that you can understand the framework from the source.
 ## Getting Started
 Step 1
 ```
