@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dynamic_form/src/components/card_container.dart';
+import 'package:flutter_dynamic_form/src/components/card_container_horizontal.dart';
 
 class FieldEditor extends FormField<String> {
 
@@ -9,7 +9,6 @@ class FieldEditor extends FormField<String> {
   final String label;
   final String hintText;
   final Icon icon;
-  final Widget requiredIndicator;
   final bool visible;
   final InputDecoration decoration;
   final TextInputType keyboardType;
@@ -35,7 +34,6 @@ class FieldEditor extends FormField<String> {
     this.visible = true,
     this.onChanged,
     this.icon,
-    this.requiredIndicator,
     this.hintText,
     this.prefixText,
     this.decoration,
@@ -137,43 +135,39 @@ class _FieldEditorState extends FormFieldState<String> {
 
   Widget _build(BuildContext context) {
     // make local mutable copies of values and options
-    return GestureDetector(
-      onTap: () {},
-      child: CardContainer(
-        label: widget?.label,
-        visible: widget?.visible,
-        leftIcon: widget?.icon,
-        requiredIndicator: widget?.requiredIndicator,
-        errorText: errorText,
-        required: widget?.required,
-        content: TextField(
-          controller: _effectiveController,
-          onChanged: _handleOnChanged,
-          decoration: widget.decoration ??
-              InputDecoration(
-                contentPadding: EdgeInsets.all(8.0),
-                border: InputBorder.none,
-                errorText: errorText,
-                prefixText: widget?.prefixText,
-                hintText: widget?.hintText,
-                isDense: true,
-              ),
-          readOnly: widget.readOnly,
-          maxLines: widget.maxLines,
-          minLines: widget.minLines,
-          autofocus: widget.autoFocus,
-          style: widget.contentTextStyle,
-          textAlign: widget.contentTextAlign ?? TextAlign.start,
-          keyboardType: widget.keyboardType,
-          maxLength: widget.maxLength,
-          inputFormatters: widget?.inputFormatterList ??
-              [
-                // if we don't want the counter, use this maxLength instead
-                LengthLimitingTextInputFormatter(widget?.maxLength)
-              ],
-        ),
-//        pickerIcon: Icons.arrow_drop_down,
+    return CardContainerHorizontal(
+      label: widget?.label,
+      visible: widget?.visible,
+      leftIcon: widget?.icon,
+      errorText: errorText,
+      isRequired: widget?.required,
+      content: TextField(
+        controller: _effectiveController,
+        onChanged: _handleOnChanged,
+        decoration: widget.decoration ??
+            InputDecoration(
+              contentPadding: EdgeInsets.all(8.0),
+              border: InputBorder.none,
+              errorText: errorText,
+              prefixText: widget?.prefixText,
+              hintText: widget?.hintText,
+              isDense: true,
+            ),
+        readOnly: widget.readOnly,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        autofocus: widget.autoFocus,
+        style: widget.contentTextStyle,
+        textAlign: widget.contentTextAlign ?? TextAlign.start,
+        keyboardType: widget.keyboardType,
+        maxLength: widget.maxLength,
+        inputFormatters: widget?.inputFormatterList ??
+            [
+              // if we don't want the counter, use this maxLength instead
+              LengthLimitingTextInputFormatter(widget?.maxLength)
+            ],
       ),
+//        pickerIcon: Icons.arrow_drop_down,
     );
   }
 }

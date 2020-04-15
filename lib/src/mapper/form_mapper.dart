@@ -47,7 +47,6 @@ class DefaultMapperFactory extends MapperFactory {
           hintText: item.extra['hintText'],
           required: item.required,
           validator: (value) {
-            print("required${item.required}");
             if (!item.required) return null;
             String result = item?.validators?.call(value);
             print(result);

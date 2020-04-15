@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dynamic_form/src/components/card_container.dart';
+import 'package:flutter_dynamic_form/src/components/card_container_horizontal.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
 class FieldPicker extends FormField<String> {
@@ -116,11 +116,10 @@ class _FieldPickerState extends FormFieldState<String> {
       onTap: () {
         _showDialog(widget?.label);
       },
-      child: CardContainer(
+      child: CardContainerHorizontal(
         label: widget?.label,
         visible: widget?.visible,
         leftIcon: widget?.icon,
-        requiredIndicator: widget?.requiredIndicator,
         errorText: errorText,
         content: Text(
           content,

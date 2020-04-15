@@ -11,7 +11,7 @@ List<FormItem> buildFormItemList() {
   item.add(FormItem(GlobalKey<FormState>(),
       widgetType: WIDGET_TYPE_EDIT,
       label: "用户名",
-      required: false,
+      required: true,
       validators: EmailValidator(errorText: "请输入正确的邮箱"),
       mapKey: "userName",
       extra: {'hintText': '请输入用户名'}));
