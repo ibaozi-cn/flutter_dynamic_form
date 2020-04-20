@@ -1,4 +1,5 @@
 import 'package:example/data.dart';
+import 'package:example/page_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_dynamic_form/flutter_dynamic_form.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: <String, WidgetBuilder>{
+        "/page_home": (BuildContext context) => PageForm()
+      },
     );
   }
 }
@@ -105,29 +109,30 @@ class _MyHomePageState extends State<MyHomePage> {
             // axis because Columns are vertical (the cross axis would be
             // horizontal).
             children: <Widget>[
-              Form(
-                key: _formKey,
-                child: FieldTest(
-                  onChanged: (value) {
-                    print("FieldTest onChanged value$value");
-                  },
-                ),
-              ),
-              RaisedButton(
-                onPressed: (){
-                  if(_formKey.currentState.validate()){
-                    print("FieldTest验证通过");
-                  }else{
-                    print("FieldTest验证失败");
-                  }
-                },
-                child: Text("校验FieldTest"),
-              ),
+//              Form(
+//                key: _formKey,
+//                child: FieldTest(
+//                  onChanged: (value) {
+//                    print("FieldTest onChanged value$value");
+//                  },
+//                ),
+//              ),
+//              RaisedButton(
+//                onPressed: () {
+//                  if (_formKey.currentState.validate()) {
+//                    print("FieldTest验证通过");
+//                  } else {
+//                    print("FieldTest验证失败");
+//                  }
+//                },
+//                child: Text("校验FieldTest"),
+//              ),
               FormBuilderWidget(
                 showSubmitButton: true,
                 itemList: _formList,
                 formBuilderController: _builderController,
                 onSubmit: (bool, data) async {
+                  Navigator.of(context).pushNamed('/page_home');
                   if (bool) print(data.toString());
                 },
                 mapperFactory: DefaultMapperFactory(null),

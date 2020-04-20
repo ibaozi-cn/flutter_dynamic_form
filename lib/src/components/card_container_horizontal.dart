@@ -18,11 +18,12 @@ class CardContainerHorizontal extends StatelessWidget with MixinContainer {
     this.leftIcon,
     this.isRequired = false,
     this.autoValidate = false,
+    this.showLine = false,
+    this.labelSuffix
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return buildContainer(
         context,
         Row(
@@ -71,5 +72,11 @@ class CardContainerHorizontal extends StatelessWidget with MixinContainer {
 
   @override
   double labelWitch;
+
+  @override
+  bool showLine;
+
+  @override
+  Widget labelSuffix;
 
 }

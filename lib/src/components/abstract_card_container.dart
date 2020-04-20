@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
-abstract class CardContainer {
+abstract class CardContainerBean {
   String label;
   double labelWitch;
   Widget content;
@@ -13,38 +15,68 @@ abstract class CardContainer {
   TextStyle labelStyle;
   double labelIconSize;
   bool autoValidate;
-
-  CardContainer(
-      this.label,
-      this.labelWitch,
-      this.content,
-      this.visible,
-      this.errorText,
-      this.leftIcon,
-      this.rightIcon,
-      this.isRequired,
-      this.labelAlign,
-      this.labelStyle,
-      this.labelIconSize,
-      this.autoValidate);
+  bool showLine;
+  Widget labelSuffix;
 }
 
-mixin MixinContainer implements CardContainer {
+class TextFieldBean {
+  String initialValue;
+  String hintText;
+  String prefixText;
+  ValueChanged<String> onChanged;
+  InputDecoration decoration;
+  TextInputType keyboardType;
+  bool autoFocus;
+  bool readOnly;
+  int maxLines;
+  int minLines;
+  int maxLength;
+  List<TextInputFormatter> inputFormatterList;
+  TextAlign contentTextAlign;
+  TextStyle contentTextStyle;
+  TextEditingController controller;
+
+  TextFieldBean(
+      {this.initialValue,
+      this.hintText,
+      this.prefixText,
+      this.onChanged,
+      this.decoration,
+      this.keyboardType,
+      this.autoFocus = false,
+      this.readOnly = false,
+      this.maxLines = 1,
+      this.minLines,
+      this.maxLength,
+      this.inputFormatterList,
+      this.contentTextAlign = TextAlign.start,
+      this.contentTextStyle =
+          const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+      this.controller});
+}
+
+mixin MixinContainer implements CardContainerBean {
   buildContainer(BuildContext context, Widget child) {
     if (visible) {
-      return Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom:
-                BorderSide(width: 1.0, color: Theme.of(context).dividerColor),
-          ),
+      return Material(
+        color: Colors.transparent,
+        child: Container(
+          decoration: showLine
+              ? BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                        width: 1.0, color: Theme.of(context).dividerColor),
+                  ),
+                )
+              : null,
+          padding: EdgeInsets.all(16.0),
+          child: child,
         ),
-        padding: EdgeInsets.all(8.0),
-        child: child,
       );
     }
     return Container();
   }
+
   _buildRequiredIndicator(BuildContext context) {
     if (isRequired == null || isRequired == false) return Container();
     return Container(
@@ -104,6 +136,7 @@ mixin MixinContainer implements CardContainer {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   _buildLabelText(context),
+                  labelSuffix ?? Container(),
                   _buildRequiredIndicator(context),
                 ],
               ),
@@ -122,11 +155,11 @@ mixin MixinContainer implements CardContainer {
 
   buildDecoratedContent(BuildContext context) {
     var decoratedContent = content;
-    if (content is TextField || content is TextFormField) {
+    if (content is TextField || content is TextFormField || content is Row) {
       // do nothing, these already have built in InputDecorations
     } else {
       // wrap in a decorator to show validation errors
-      final InputDecoration decoration = const InputDecoration()
+      InputDecoration decoration = const InputDecoration()
           .applyDefaults(Theme.of(context).inputDecorationTheme)
           .copyWith(
               errorText: errorText,
@@ -135,6 +168,8 @@ mixin MixinContainer implements CardContainer {
               border: InputBorder.none);
 
       decoratedContent = InputDecorator(decoration: decoration, child: content);
+
+      print('decoratedContent${decoratedContent.toString()}');
     }
 
     return decoratedContent;

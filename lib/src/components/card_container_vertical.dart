@@ -17,7 +17,9 @@ class CardContainerVertical extends StatelessWidget with MixinContainer {
     this.visible,
     this.leftIcon,
     this.isRequired = false,
-    this.autoValidate = false
+    this.autoValidate = false,
+    this.showLine = false,
+    this.labelSuffix
   }) : super(key: key);
 
   @override
@@ -32,7 +34,10 @@ class CardContainerVertical extends StatelessWidget with MixinContainer {
           children: <Widget>[
             Row(
               children: <Widget>[
-                buildLabelBlock(context),
+                Expanded(
+                  flex: 1,
+                  child: buildLabelBlock(context),
+                ),
                 buildRightDecoration()
               ],
             ),
@@ -76,4 +81,10 @@ class CardContainerVertical extends StatelessWidget with MixinContainer {
 
   @override
   double labelWitch;
+
+  @override
+  bool showLine;
+
+  @override
+  Widget labelSuffix;
 }

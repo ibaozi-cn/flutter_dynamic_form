@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_dynamic_form/src/utils/commons.dart';
 
 abstract class FieldValidator<T> {
   final String errorText;
@@ -125,6 +125,7 @@ class PatternValidator extends TextFieldValidator {
 }
 
 class DateValidator extends TextFieldValidator {
+
   final String format;
 
   DateValidator(this.format, {@required String errorText}) : super(errorText);
@@ -132,7 +133,7 @@ class DateValidator extends TextFieldValidator {
   @override
   bool isValid(String value) {
     try {
-      final dateTime = DateFormat(format).parseStrict(value);
+      final dateTime = DateFormat.getDateTime(value);
       return dateTime != null;
     } catch (_) {
       return false;

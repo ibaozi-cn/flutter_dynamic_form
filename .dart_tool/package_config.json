@@ -56,18 +56,6 @@
       "languageVersion": "2.2"
     },
     {
-      "name": "flutter_colorpicker",
-      "rootUri": "file:///Users/zzy/project/flutter/flutter/.pub-cache/hosted/pub.flutter-io.cn/flutter_colorpicker-0.2.6",
-      "packageUri": "lib/",
-      "languageVersion": "2.0"
-    },
-    {
-      "name": "flutter_material_pickers",
-      "rootUri": "file:///Users/zzy/project/flutter/flutter/.pub-cache/hosted/pub.flutter-io.cn/flutter_material_pickers-1.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.0"
-    },
-    {
       "name": "flutter_test",
       "rootUri": "file:///Users/zzy/project/flutter/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -78,12 +66,6 @@
       "rootUri": "file:///Users/zzy/project/flutter/flutter/.pub-cache/hosted/pub.flutter-io.cn/image-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.0"
-    },
-    {
-      "name": "intl",
-      "rootUri": "file:///Users/zzy/project/flutter/flutter/.pub-cache/hosted/pub.flutter-io.cn/intl-0.16.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.5"
     },
     {
       "name": "matcher",
@@ -182,7 +164,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-04-15T10:07:40.344189Z",
+  "generated": "2020-04-16T03:01:07.060952Z",
   "generator": "pub",
   "generatorVersion": "2.8.0-dev.12.0.flutter-9983424a3c"
 }

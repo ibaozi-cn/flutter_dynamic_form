@@ -2,54 +2,40 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dynamic_form/src/components/card_container_horizontal.dart';
+import 'package:flutter_dynamic_form/src/components/card_container_vertical.dart';
 
-class FieldEditor extends FormField<String> {
+import 'abstract_card_container.dart';
 
-  final ValueChanged<String> onChanged;
-  final String label;
-  final String hintText;
-  final Icon icon;
-  final bool visible;
-  final InputDecoration decoration;
-  final TextInputType keyboardType;
-  final bool autoFocus;
-  final bool readOnly;
-  final int maxLines;
-  final int minLines;
-  final int maxLength;
-  final String prefixText;
-  final List<TextInputFormatter> inputFormatterList;
-  final bool required;
-  final TextAlign contentTextAlign;
-  final TextStyle contentTextStyle;
-  final TextEditingController controller;
-
-
-  FieldEditor({
-    Key key,
-    String initialValue,
-    FormFieldSetter<String> onSaved,
-    FormFieldValidator<String> validator,
-    this.label = 'Label',
-    this.visible = true,
-    this.onChanged,
-    this.icon,
-    this.hintText,
-    this.prefixText,
-    this.decoration,
-    this.keyboardType,
-    this.autoFocus = false,
-    this.readOnly = false,
-    this.maxLines = 1,
-    this.minLines,
-    this.maxLength,
-    this.inputFormatterList,
-    this.required,
-    this.contentTextAlign = TextAlign.start,
-    this.contentTextStyle =
-        const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-    this.controller
-  }) : super(
+// ignore: must_be_immutable
+class FieldEditor extends FormField<String>
+    implements CardContainerBean, TextFieldBean {
+  FieldEditor(
+      {Key key,
+      this.onSaved,
+      this.validator,
+      this.initialValue,
+      this.label = 'Label',
+      this.visible = true,
+      this.onChanged,
+      this.leftIcon,
+      this.hintText,
+      this.prefixText,
+      this.decoration,
+      this.keyboardType,
+      this.autoFocus = false,
+      this.readOnly = false,
+      this.maxLines = 1,
+      this.minLines,
+      this.maxLength,
+      this.inputFormatterList,
+      this.isRequired,
+      this.contentTextAlign = TextAlign.start,
+      this.contentTextStyle =
+          const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+      this.controller,
+        this.labelSuffix,
+      this.showLine})
+      : super(
             key: key,
             initialValue: initialValue,
             onSaved: onSaved,
@@ -63,10 +49,102 @@ class FieldEditor extends FormField<String> {
   _FieldEditorState createState() {
     return _FieldEditorState();
   }
+
+  @override
+  bool autoValidate;
+
+  @override
+  Widget content;
+
+  @override
+  String errorText;
+
+  @override
+  bool isRequired;
+
+  @override
+  MainAxisAlignment labelAlign;
+
+  @override
+  double labelIconSize;
+
+  @override
+  TextStyle labelStyle;
+
+  @override
+  double labelWitch;
+
+  @override
+  Icon leftIcon;
+
+  @override
+  Icon rightIcon;
+
+  @override
+  String label;
+
+  @override
+  bool visible;
+
+  @override
+  bool autoFocus;
+
+  @override
+  TextAlign contentTextAlign;
+
+  @override
+  TextStyle contentTextStyle;
+
+  @override
+  TextEditingController controller;
+
+  @override
+  InputDecoration decoration;
+
+  @override
+  String hintText;
+
+  @override
+  List<TextInputFormatter> inputFormatterList;
+
+  @override
+  TextInputType keyboardType;
+
+  @override
+  int maxLength;
+
+  @override
+  int maxLines;
+
+  @override
+  int minLines;
+
+  @override
+  var onChanged;
+
+  @override
+  String prefixText;
+
+  @override
+  bool readOnly;
+
+  @override
+  String initialValue;
+
+  @override
+  FormFieldSetter<String> onSaved;
+
+  @override
+  FormFieldValidator<String> validator;
+
+  @override
+  bool showLine;
+
+  @override
+  Widget labelSuffix;
 }
 
 class _FieldEditorState extends FormFieldState<String> {
-
   TextEditingController _controller;
 
   TextEditingController get _effectiveController =>
@@ -80,7 +158,7 @@ class _FieldEditorState extends FormFieldState<String> {
     super.initState();
     if (widget.controller == null) {
       _controller = TextEditingController(text: widget.initialValue);
-    }else{
+    } else {
       widget.controller.addListener(_handleControllerChanged);
     }
   }
@@ -116,8 +194,6 @@ class _FieldEditorState extends FormFieldState<String> {
     }
   }
 
-
-
   void _handleControllerChanged() {
     if (_effectiveController.text != value) {
       didChange(_effectiveController.text);
@@ -138,15 +214,14 @@ class _FieldEditorState extends FormFieldState<String> {
     return CardContainerHorizontal(
       label: widget?.label,
       visible: widget?.visible,
-      leftIcon: widget?.icon,
+      leftIcon: widget?.leftIcon,
       errorText: errorText,
-      isRequired: widget?.required,
+      isRequired: widget?.isRequired,
       content: TextField(
         controller: _effectiveController,
         onChanged: _handleOnChanged,
         decoration: widget.decoration ??
             InputDecoration(
-              contentPadding: EdgeInsets.all(8.0),
               border: InputBorder.none,
               errorText: errorText,
               prefixText: widget?.prefixText,

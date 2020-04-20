@@ -11,12 +11,14 @@ class FormBuilderWidget extends StatefulWidget {
   final MapperFactory mapperFactory;
   final FormBuilderController formBuilderController;
   final OnSubmit onSubmit;
+  final bool isShowLine;
 
   FormBuilderWidget(
       {Key key,
       this.showSubmitButton = false,
       this.itemList = const [],
       this.onSubmit,
+      this.isShowLine,
       @required this.mapperFactory,
       this.formBuilderController})
       : super(key: key);

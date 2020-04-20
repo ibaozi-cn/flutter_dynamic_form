@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dynamic_form/src/components/card_container_horizontal.dart';
-import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
 class FieldPicker extends FormField<String> {
 
@@ -62,6 +61,7 @@ class FieldPicker extends FormField<String> {
 }
 
 class _FieldPickerState extends FormFieldState<String> {
+
   @override
   FieldPicker get widget => super.widget as FieldPicker;
 
@@ -80,20 +80,7 @@ class _FieldPickerState extends FormFieldState<String> {
   }
 
   void _showMaterialScrollPicker(String label, String option) {
-    showMaterialScrollPicker(
-      context: context,
-      title: label,
-      items: options,
-      selectedItem: option,
-      onChanged: (option) {
-        if (option != null) {
-          int optionIndex = options.indexOf(option);
-          String value = values[optionIndex];
-          didChange(value);
-          if (widget.onChanged != null) widget.onChanged(value);
-        }
-      },
-    );
+
   }
 
   Widget _build(BuildContext context) {

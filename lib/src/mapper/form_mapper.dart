@@ -45,7 +45,7 @@ class DefaultMapperFactory extends MapperFactory {
           label: item.label,
           initialValue: "",
           hintText: item.extra['hintText'],
-          required: item.required,
+          isRequired: item.required,
           validator: (value) {
             if (!item.required) return null;
             String result = item?.validators?.call(value);
