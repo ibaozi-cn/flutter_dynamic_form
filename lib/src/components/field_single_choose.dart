@@ -77,7 +77,7 @@ class FieldSingleChoose extends FormField<int> implements CardContainerBean {
       this.onSaved,
       this.validator,
       this.onChanged,
-      this.initialValue})
+      this.initialValue = 0})
       : super(
             key: key,
             onSaved: onSaved,
@@ -94,10 +94,32 @@ class FieldSingleChoose extends FormField<int> implements CardContainerBean {
 }
 
 class _FieldSingleChooseState extends FormFieldState<int> {
+
   int indexSelect = 0;
 
   @override
   FieldSingleChoose get widget => super.widget as FieldSingleChoose;
+
+  @override
+  void initState() {
+    setState(() {
+      indexSelect = widget.initialValue;
+    });
+    super.initState();
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    setState(() {
+      indexSelect = widget.initialValue;
+    });
+    didChange(indexSelect);
+    widget?.onChanged?.call({
+      widget.chooseData.keys.elementAt(indexSelect):
+      widget.chooseData.values.elementAt(indexSelect)
+    });
+  }
 
   _build(BuildContext context) {
     return CardContainerVertical(
@@ -130,10 +152,11 @@ class _FieldSingleChooseState extends FormFieldState<int> {
                               : Color(0xFF77808A)),
                     ),
                     onPressed: () {
+                      didChange(index);
                       setState(() {
                         indexSelect = index;
                       });
-                      widget?.onChanged({
+                      widget?.onChanged?.call({
                         widget.chooseData.keys.elementAt(index):
                             widget.chooseData.values.elementAt(index)
                       });
